@@ -1,8 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../Firebase';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Eye, EyeOff } from 'lucide-react';
+
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 function Signup() {
     const [email, setEmail] = useState('');
@@ -21,7 +27,7 @@ function Signup() {
         const hasSpecialChar = /[@$!%*?&]/.test(password);
         const isValidLength = password.length >= 8;
 
-        if (!password) return ''; // Don't display error if the field is empty
+        if (!password) return '';
 
         let errorMessages = [];
 
@@ -69,69 +75,99 @@ function Signup() {
 
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600">
-            <div className="w-full max-w-sm p-8 bg-white rounded-lg shadow-lg">
-                <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Create an Investment Account</h2>
-                {error && <p className="text-center text-red-500 mb-4">{error}</p>}
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="relative mb-4">
-                    <input
-                        type={showPassword ? 'text' : 'password'}
-                        placeholder="Password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button
-                        type="button"
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                        onClick={() => setShowPassword(!showPassword)}
-                    >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </button>
-                </div>
-                {passwordError && (
-                    <p className="text-red-500 text-sm mt-1">{passwordError}</p> // Error message after password field
-                )}
-                <div className="relative mb-6">
-                    <input
-                        type={showConfirmPassword ? 'text' : 'password'}
-                        placeholder="Confirm Password"
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button
-                        type="button"
-                        className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    >
-                        {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </button>
-                </div>
-                <button
-                    className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
-                    onClick={handleSignup}
-                >
-                    Sign Up
-                </button>
-                <p className="text-center text-sm text-gray-600 mt-4">
-                    Already have an account?{' '}
-                    <span
-                        className="text-blue-500 cursor-pointer"
-                        onClick={() => navigate('/login')}
-                    >
-                        Log In
-                    </span>
-                </p>
-            </div>
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle className="text-2xl font-semibold text-center">Create an Investment Account</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    {error && (
+                        <Alert variant="destructive">
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <div className="relative">
+                            <Input
+                                type={showPassword ? 'text' : 'password'}
+                                id="password"
+                                placeholder="Enter your password"
+                                value={password}
+                                onChange={handlePasswordChange}
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? (
+                                    <EyeOff className="h-4 w-4" />
+                                ) : (
+                                    <Eye className="h-4 w-4" />
+                                )}
+                            </Button>
+                        </div>
+                        {passwordError && (
+                            <p className="text-sm text-red-500 mt-1">{passwordError}</p>
+                        )}
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="confirmPassword">Confirm Password</Label>
+                        <div className="relative">
+                            <Input
+                                type={showConfirmPassword ? 'text' : 'password'}
+                                id="confirmPassword"
+                                placeholder="Confirm your password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                            />
+                            <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            >
+                                {showConfirmPassword ? (
+                                    <EyeOff className="h-4 w-4" />
+                                ) : (
+                                    <Eye className="h-4 w-4" />
+                                )}
+                            </Button>
+                        </div>
+                    </div>
+                    <Button className="w-full" onClick={handleSignup}>
+                        Sign Up
+                    </Button>
+                </CardContent>
+                <CardFooter>
+                    <p className="text-center text-sm text-gray-600 w-full">
+                        Already have an account?{' '}
+                        <Button
+                            variant="link"
+                            className="p-0 h-auto font-normal"
+                            onClick={() => navigate('/login')}
+                        >
+                            Log In
+                        </Button>
+                    </p>
+                </CardFooter>
+            </Card>
         </div>
     );
 }
 
 export default Signup;
+
