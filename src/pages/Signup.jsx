@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../Firebase';
+import { auth, db } from '../Firebase'; // Import Firestore instance
+import { doc, setDoc } from 'firebase/firestore'; // Import Firestore methods
 import { Eye, EyeOff } from 'lucide-react';
 
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -64,7 +65,17 @@ function Signup() {
         }
 
         try {
-            await createUserWithEmailAndPassword(auth, email, password);
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            // Add user to Firestore
+            const userDocRef = doc(db, 'users', user.uid);
+            await setDoc(userDocRef, {
+                name: '',
+                email: user.email,
+                phone: ''
+            });
+
             alert('Account created successfully!');
             navigate('/login');
         } catch (err) {
@@ -170,4 +181,3 @@ function Signup() {
 }
 
 export default Signup;
-

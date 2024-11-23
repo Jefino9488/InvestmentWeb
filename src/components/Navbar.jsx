@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from '../Firebase';
 import { signOut } from 'firebase/auth';
 import { Menu, X, BarChart2, User } from 'lucide-react';
@@ -10,6 +10,7 @@ function Navbar({ isLoggedIn }) {
     const [showMobileMenu, setShowMobileMenu] = useState(false);
     const profileMenuRef = useRef(null);
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         const handleOutsideClick = (e) => {
@@ -30,8 +31,10 @@ function Navbar({ isLoggedIn }) {
         }
     };
 
+    const isActive = (path) => location.pathname === path;
+
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-700 to-indigo-800 shadow-lg">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-800 to-indigo-900 shadow-lg">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
@@ -42,33 +45,14 @@ function Navbar({ isLoggedIn }) {
                         <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                             {isLoggedIn ? (
                                 <>
-                                    <Link
-                                        to="/dashboard"
-                                        className="text-white hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
-                                    >
-                                        Dashboard
-                                    </Link>
-                                    <Link
-                                        to="/profile"
-                                        className="text-white hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
-                                    >
-                                        Profile
-                                    </Link>
+                                    <NavLink to="/home" isActive={isActive('/home')}>Dashboard</NavLink>
+                                    <NavLink to="/portfolio" isActive={isActive('/portfolio')}>Portfolio</NavLink>
+                                    <NavLink to="/profile" isActive={isActive('/profile')}>Profile</NavLink>
                                 </>
                             ) : (
                                 <>
-                                    <Link
-                                        to="/"
-                                        className="text-white hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
-                                    >
-                                        About
-                                    </Link>
-                                    <Link
-                                        to="/services"
-                                        className="text-white hover:bg-blue-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
-                                    >
-                                        Services
-                                    </Link>
+                                    <NavLink to="/" isActive={isActive('/')}>About</NavLink>
+                                    <NavLink to="/services" isActive={isActive('/services')}>Services</NavLink>
                                 </>
                             )}
                         </div>
@@ -121,7 +105,7 @@ function Navbar({ isLoggedIn }) {
                     <div className="-mr-2 flex items-center sm:hidden">
                         <button
                             onClick={() => setShowMobileMenu(!showMobileMenu)}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-blue-600 focus:outline-none transition duration-150 ease-in-out"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-blue-700 focus:outline-none transition duration-150 ease-in-out"
                         >
                             {showMobileMenu ? (
                                 <X className="block h-6 w-6" />
@@ -138,45 +122,21 @@ function Navbar({ isLoggedIn }) {
                     <div className="px-2 pt-2 pb-3 space-y-1">
                         {isLoggedIn ? (
                             <>
-                                <Link
-                                    to="/dashboard"
-                                    className="text-white hover:bg-blue-600 block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
-                                >
-                                    Dashboard
-                                </Link>
-                                <Link
-                                    to="/profile"
-                                    className="text-white hover:bg-blue-600 block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
-                                >
-                                    Profile
-                                </Link>
+                                <MobileNavLink to="/home" isActive={isActive('/home')}>Dashboard</MobileNavLink>
+                                <MobileNavLink to="/portfolio" isActive={isActive('/portfolio')}>Portfolio</MobileNavLink>
+                                <MobileNavLink to="/profile" isActive={isActive('/profile')}>Profile</MobileNavLink>
                                 <button
                                     onClick={handleSignOut}
-                                    className="text-white hover:bg-blue-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
+                                    className="text-white hover:bg-blue-700 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
                                 >
                                     Sign out
                                 </button>
                             </>
                         ) : (
                             <>
-                                <Link
-                                    to="/"
-                                    className="text-white hover:bg-blue-600 block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
-                                >
-                                    About
-                                </Link>
-                                <Link
-                                    to="/services"
-                                    className="text-white hover:bg-blue-600 block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
-                                >
-                                    Services
-                                </Link>
-                                <Link
-                                    to="/login"
-                                    className="text-white hover:bg-blue-600 block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out"
-                                >
-                                    Login
-                                </Link>
+                                <MobileNavLink to="/" isActive={isActive('/')}>About</MobileNavLink>
+                                <MobileNavLink to="/services" isActive={isActive('/services')}>Services</MobileNavLink>
+                                <MobileNavLink to="/login" isActive={isActive('/login')}>Login</MobileNavLink>
                             </>
                         )}
                     </div>
@@ -186,4 +146,35 @@ function Navbar({ isLoggedIn }) {
     );
 }
 
+function NavLink({ to, children, isActive }) {
+    return (
+        <Link
+            to={to}
+            className={`${
+                isActive
+                    ? 'bg-blue-700 text-white'
+                    : 'text-blue-100 hover:bg-blue-700 hover:text-white'
+            } px-3 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out`}
+        >
+            {children}
+        </Link>
+    );
+}
+
+function MobileNavLink({ to, children, isActive }) {
+    return (
+        <Link
+            to={to}
+            className={`${
+                isActive
+                    ? 'bg-blue-700 text-white'
+                    : 'text-blue-100 hover:bg-blue-700 hover:text-white'
+            } block px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out`}
+        >
+            {children}
+        </Link>
+    );
+}
+
 export default Navbar;
+

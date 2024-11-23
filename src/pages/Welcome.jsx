@@ -3,6 +3,7 @@ import { ChevronRight, BarChart2, Briefcase, LightbulbIcon, ShieldCheck } from '
 export default function Home() {
     return (
         <div className="bg-gray-50 min-h-screen">
+            <br/>
             {/* Hero Section */}
             <section className="bg-blue-600 text-white py-20">
                 <div className="container mx-auto px-4 text-center">

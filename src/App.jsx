@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { auth } from './Firebase'; // Firebase auth import
 import { onAuthStateChanged } from 'firebase/auth';
 
+import Profile from './pages/Profile';
+import Portfolio from './pages/Portfolio';
 // Import pages and components
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -35,6 +37,8 @@ function App() {
                     {/* Protected route for authenticated users */}
                     <Route element={<ProtectedRoute isLoggedIn={isLoggedIn} />}>
                         <Route path="/home" element={<Home />} />
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/portfolio" element={<Portfolio />} />
                     </Route>
                 </Routes>
             </Layout>
