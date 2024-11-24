@@ -17,13 +17,12 @@ import Welcome from './pages/Welcome';
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // Check if the user is logged in via Firebase auth
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            setIsLoggedIn(!!user); // Set logged-in state based on user existence
+            setIsLoggedIn(!!user);
         });
 
-        return () => unsubscribe(); // Unsubscribe when the component unmounts
+        return () => unsubscribe();
     }, []);
 
     return (
