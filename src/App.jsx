@@ -30,6 +30,7 @@ function App() {
             <Layout isLoggedIn={isLoggedIn}> {/* Pass isLoggedIn to Layout */}
                 <Routes>
                     <Route path="/" element={<Welcome />} />
+                    <Route path="InvestmentWeb/" element={<Welcome />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
 
