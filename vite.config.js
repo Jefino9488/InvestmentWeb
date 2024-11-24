@@ -9,6 +9,7 @@ export default defineConfig({
     port: 5173,
     strictPort: true
   },
+  base: '/InvestmentWeb/',
   resolve: {
     alias: {
       // eslint-disable-next-line no-undef
